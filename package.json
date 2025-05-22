@@ -1,0 +1,16 @@
+{
+  "name": "scratchcard",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "Trinadh",
+  "type": "commonjs",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "ejs": "^3.1.10",
+    "express": "^5.1.0"
+  }
+}
