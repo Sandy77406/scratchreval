@@ -2,7 +2,7 @@
 FROM node:22.15.1
 
 # Create app directory
-WORKDIR /usr/src/app
+WORKDIR /usr/src/app/views
 
 # Install app dependencies
 # A wildcard is used to ensure both package.json AND package-lock.json are copied
