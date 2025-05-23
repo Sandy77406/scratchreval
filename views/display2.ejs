@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Display Records (Scratch Card)</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="container">
+   
+    <h2>Scratch to Reveal</h2>
+    <% if (records.length === 0) { %>
+      <p>No records available.</p>
+    <% } else { %>
+      <div id="container">
+        <div id="card" class="scratch-card">
+          <div class="number-overlay"><%= records[records.length - 1].number %></div>
+          <canvas id="scratch-canvas" class="scratch-canvas"></canvas>
+        </div>
+        <div id="scratch-error" style="color: red; display: none;">
+          Failed to initialize scratch card. Ensure canvas is supported.
+        </div>
+      </div>
+    <% } %>
+   
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const canvas = document.getElementById('scratch-canvas');
+      if (!canvas) return;
+
+      const ctx = canvas.getContext('2d');
+      if (!ctx) {
+        document.getElementById('scratch-error').style.display = 'block';
+        return;
+      }
+
+      // Set canvas size
+      const width = 400;
+      const height = 450;
+      canvas.width = width;
+      canvas.height = height;
+
+      // Apply VIBGYOR mask (rainbow gradient)
+      const maskGradient = ctx.createLinearGradient(0, 0, width, 0);
+      maskGradient.addColorStop(0, '#8B00FF'); // Violet
+      maskGradient.addColorStop(0.17, '#4B0082'); // Indigo
+      maskGradient.addColorStop(0.33, '#0000FF'); // Blue
+      maskGradient.addColorStop(0.5, '#00FF00'); // Green
+      maskGradient.addColorStop(0.67, '#FFFF00'); // Yellow
+      maskGradient.addColorStop(0.83, '#FFA500'); // Orange
+      maskGradient.addColorStop(1, '#FF0000'); // Red
+      ctx.fillStyle = maskGradient;
+      ctx.fillRect(0, 0, width, height);
+
+      // Scratch settings
+      ctx.globalCompositeOperation = 'destination-out';
+      ctx.lineWidth = 50;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+
+      let isScratching = false;
+
+      // Mouse events
+      function getPosition(e) {
+        const rect = canvas.getBoundingClientRect();
+        return {
+          x: e.clientX - rect.left,
+          y: e.clientY - rect.top
+        };
+      }
+
+      canvas.addEventListener('mousedown', (e) => {
+        isScratching = true;
+        const pos = getPosition(e);
+        ctx.beginPath();
+        ctx.moveTo(pos.x, pos.y);
+      });
+
+      canvas.addEventListener('mousemove', (e) => {
+        if (!isScratching) return;
+        const pos = getPosition(e);
+        ctx.lineTo(pos.x, pos.y);
+        ctx.stroke();
+      });
+
+      canvas.addEventListener('mouseup', () => {
+        isScratching = false;
+        ctx.closePath();
+      });
+
+      canvas.addEventListener('mouseleave', () => {
+        isScratching = false;
+        ctx.closePath();
+      });
+
+      // Touch events for mobile
+      function getTouchPosition(e) {
+        const rect = canvas.getBoundingClientRect();
+        const touch = e.touches[0];
+        return {
+          x: touch.clientX - rect.left,
+          y: touch.clientY - rect.top
+        };
+      }
+
+      canvas.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        isScratching = true;
+        const pos = getTouchPosition(e);
+        ctx.beginPath();
+        ctx.moveTo(pos.x, pos.y);
+      });
+
+      canvas.addEventListener('touchmove', (e) => {
+        e.preventDefault();
+        if (!isScratching) return;
+        const pos = getTouchPosition(e);
+        ctx.lineTo(pos.x, pos.y);
+        ctx.stroke();
+      });
+
+      canvas.addEventListener('touchend', () => {
+        isScratching = false;
+        ctx.closePath();
+      });
+
+      canvas.addEventListener('touchcancel', () => {
+        isScratching = false;
+        ctx.closePath();
+      });
+    });
+  </script>
+</body>
+</html>

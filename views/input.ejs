@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Input Number and Dates</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Add Number and Dates</h1>
+    <form action="/update" method="POST">
+      <label for="number">Number:</label>
+      <input type="number" id="number" name="number" value="<%= number %>" required step="any">
+      <label for="startDate">Start Date & Time:</label>
+      <input type="datetime-local" id="startDate" name="startDate" value="<%= startDate %>" required>
+      <label for="endDate">End Date & Time:</label>
+      <input type="datetime-local" id="endDate" name="endDate" value="<%= endDate %>" required>
+      <button type="submit">Add Record</button>
+    </form>
+    <a href="/display">View Records</a>
+  </div>
+</body>
+</html>
