@@ -109,9 +109,9 @@ app.post('/display', async (req, res) => {
 });
 
 // Display screen (new)
-app.get('/display2', async (req, res) => {
+app.get('/scratch', async (req, res) => {
   const records = await readRecords();
-  res.render('display2', {
+  res.render('scratch', {
     records,
     filterStart: '',
     filterEnd: '',
@@ -120,7 +120,7 @@ app.get('/display2', async (req, res) => {
 });
 
 // Handle date range filter for display2
-app.post('/display2', async (req, res) => {
+app.post('/scratch', async (req, res) => {
   const { filterStart, filterEnd } = req.body;
   const records = await readRecords();
 
@@ -138,7 +138,7 @@ app.post('/display2', async (req, res) => {
     return (!start || recordStart >= start) && (!end || recordStart <= end);
   });
 
-  res.render('display2', {
+  res.render('scratch', {
     records,
     filterStart: filterStart || '',
     filterEnd: filterEnd || '',
@@ -158,7 +158,7 @@ app.post('/delete', async (req, res) => {
   }
 
   // Redirect to the appropriate display page
-  res.redirect(source === 'display2' ? '/display2' : '/display');
+  res.redirect(source === 'scratch' ? '/scratch' : '/display');
 });
 
 // Start server
